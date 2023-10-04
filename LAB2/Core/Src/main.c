@@ -107,7 +107,7 @@ int main(void)
 	  if(timer_flag1 == 1){
 		  set_Timer1(50);
 		  display_flag = !display_flag;
-		  update_display(display_flag);
+		  //update_display(display_flag);//display new state
 	  }
   }
   /* USER CODE END 3 */
