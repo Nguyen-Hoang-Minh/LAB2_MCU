@@ -30,8 +30,4 @@ void timerRun(){
 	if(timer1_counter <= 0){
 		timer_flag1 = 1;
 	}
-	timer2_counter--;
-	if(timer2_counter <= 0){
-		timer_flag2 = 1;
-	}
 }

@@ -32,6 +32,6 @@ void timerRun(){
 	}
 	timer2_counter--;
 	if(timer2_counter <= 0){
-		timer_flag2 = 1;
+		timer2_flag = 1;
 	}
 }
