@@ -28,7 +28,11 @@ int get_timer1_counter(){
 
 void timerRun(){
 	timer1_counter--;
+	timer2_counter--;
 	if(timer1_counter <= 0){
 		timer_flag1 = 1;
+	}
+	if(timer2_counter <= 0){
+		timer_flag2 = 1;
 	}
 }
