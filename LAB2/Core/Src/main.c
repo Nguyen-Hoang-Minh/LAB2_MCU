@@ -23,6 +23,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "software_timer.h"
+#include <stdlib.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -52,12 +53,18 @@ static void MX_GPIO_Init(void);
 static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 
+uint8_t matrix_buffer[8] = {0x18,0x24,0x42,0x42,0x7E,0x42,0x42,0x42};
+uint8_t stored_buffer[8] = {0x18,0x24,0x42,0x42,0x7E,0x42,0x42,0x42};
+const int MAX_LED_MATRIX = 8;
+
 void display7SEG(int number);
 void update_display(int* display_flag);
 void reset_all_row();
 void display_row(uint8_t data);
-void updateLEDMatrix(int* index);
-void set_row();
+void updateLEDMatrix(int* index, uint8_t* matrix_buffer);
+void update_LED_buffer(uint8_t data[MAX_LED_MATRIX]);
+void reset_buffer();
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -98,8 +105,10 @@ int main(void)
   HAL_TIM_Base_Start_IT (& htim2 );
   set_Timer1(50);//counter for 7-segment LED
   set_Timer2(100);//counter for 2 LEDs
+  set_Timer3(450);
   int display_flag = 0;//indicate for the first 7LED (number 1)
   int matrix_flag = 0;
+  int shift_cycle_flag = 0;
   //display7SEG(1);
 
 
@@ -117,13 +126,22 @@ int main(void)
 	  if(timer_flag1 == 1){
 		  set_Timer1(50);
 	 	  update_display(&display_flag);
-	 	  updateLEDMatrix(&matrix_flag);
+	 	  updateLEDMatrix(&matrix_flag, matrix_buffer);
 	  }
 	  if(timer_flag2 == 1){
 	 	  set_Timer2(100);
 	 	  HAL_GPIO_TogglePin(GPIOA, DOT_Pin);
 	 	  HAL_GPIO_TogglePin(GPIOA, LED_RED_Pin);
 	   }
+	  if(timer_flag3 == 1){
+		  set_Timer3(450);
+		  shift_cycle_flag++;
+		  update_LED_buffer(matrix_buffer);
+		  if(shift_cycle_flag >= 8){
+			  shift_cycle_flag = 0;
+			  reset_buffer();
+		  }
+	  }
   }
   /* USER CODE END 3 */
 }
@@ -335,10 +353,10 @@ void update_display(int* display_flag){
 
 uint16_t col_trigger[] = {ENM0_Pin, ENM1_Pin, ENM2_Pin, ENM3_Pin, ENM4_Pin, ENM5_Pin, ENM6_Pin, ENM7_Pin};
 uint16_t row_trigger[] = {ROW0_Pin, ROW1_Pin, ROW2_Pin, ROW3_Pin, ROW4_Pin, ROW5_Pin, ROW6_Pin, ROW7_Pin};
-const int MAX_LED_MATRIX = 8;
+
 int index_led_matrix = 0;
-uint8_t matrix_buffer[8] = {0x18,0x24,0x42,0x42,0x7E,0x42,0x42,0x42};
-void updateLEDMatrix(int* matrix_flag){
+
+void updateLEDMatrix(int* matrix_flag, uint8_t* matrix_buffer){
     switch (*matrix_flag){
         case 0:{
         	(*matrix_flag)++;
@@ -421,6 +439,17 @@ void reset_all_row(){
 	}
 }
 
+void update_LED_buffer(uint8_t data[MAX_LED_MATRIX]){
+	for(int i = 0; i<MAX_LED_MATRIX; i++){
+		data[i] = data[i]<<1;
+	}
+}
+
+void reset_buffer(){
+	for(int i = 0; i<MAX_LED_MATRIX; i++){
+		matrix_buffer[i] = stored_buffer[i];
+	}
+}
 /* USER CODE END 4 */
 
 /**
