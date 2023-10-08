@@ -218,8 +218,8 @@ int main(void)
   HAL_TIM_Base_Start_IT (& htim2 );
  80001fe:	4814      	ldr	r0, [pc, #80]	; (8000250 <main+0x68>)
  8000200:	f001 fa6e 	bl	80016e0 <HAL_TIM_Base_Start_IT>
-  set_Timer1(50);//counter for 7-segment LED
- 8000204:	2032      	movs	r0, #50	; 0x32
+  set_Timer1(25);//counter for 7-segment LED
+ 8000204:	2019      	movs	r0, #25
  8000206:	f7ff ffa1 	bl	800014c <set_Timer1>
   set_Timer2(100);//counter for 2 LEDs
  800020a:	2064      	movs	r0, #100	; 0x64
@@ -239,8 +239,8 @@ int main(void)
  800021a:	681b      	ldr	r3, [r3, #0]
  800021c:	2b01      	cmp	r3, #1
  800021e:	d106      	bne.n	800022e <main+0x46>
-		  set_Timer1(50);
- 8000220:	2032      	movs	r0, #50	; 0x32
+		  set_Timer1(25);
+ 8000220:	2019      	movs	r0, #25
  8000222:	f7ff ff93 	bl	800014c <set_Timer1>
 		  update7SEG(&display_flag);
  8000226:	1d3b      	adds	r3, r7, #4

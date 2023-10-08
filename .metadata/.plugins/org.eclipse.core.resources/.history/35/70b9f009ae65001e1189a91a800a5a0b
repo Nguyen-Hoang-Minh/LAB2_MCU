@@ -96,7 +96,7 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start_IT (& htim2 );
-  set_Timer1(25);//counter for 7-segment LED
+  set_Timer1(50);//counter for 7-segment LED
   set_Timer2(100);//counter for 2 LEDs
   int display_flag = 0;//indicate for the first 7LED (number 1)
   init_clock();
