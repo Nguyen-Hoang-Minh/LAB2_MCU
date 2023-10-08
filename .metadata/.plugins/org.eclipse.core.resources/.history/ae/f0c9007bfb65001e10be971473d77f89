@@ -341,6 +341,7 @@ void init_clock(){
 	display7SEG(led_buffer[0]);
 }
 void update_clock_buffer(int hour, int minute){
+
 	led_buffer[0] = hour/10;
 	led_buffer[1] = hour%10;
 	led_buffer[2] = minute/10;

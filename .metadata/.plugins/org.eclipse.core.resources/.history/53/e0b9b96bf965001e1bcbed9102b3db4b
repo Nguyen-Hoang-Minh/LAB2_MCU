@@ -56,7 +56,7 @@ int index_led = 0;
 int led_buffer[4] = {1, 2, 5, 9};
 void display7SEG(int number);
 void update7SEG(int* display_flag);
-void update_clock_buffer(int hour, int minute);
+void update_clock_buffer();
 void init_clock();
 /* USER CODE END PFP */
 
@@ -99,7 +99,7 @@ int main(void)
   set_Timer1(25);//counter for 7-segment LED
   set_Timer2(100);//counter for 2 LEDs
   int display_flag = 0;//indicate for the first 7LED
-  int hour = 23, minute = 59, second = 50;
+  int hour = 15, minute = 8, second = 50;
   led_buffer[0] = hour/10;
   led_buffer[1] = hour%10;
   led_buffer[2] = minute/10;
@@ -115,7 +115,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	  if(timer_flag1 == 1){
-		  set_Timer1(25);
+		  set_Timer1(50);
 		  update7SEG(&display_flag);
 	  }
 	  if(timer_flag2 == 1){
@@ -134,7 +134,7 @@ int main(void)
 		  if(hour>=24){
 			  hour = 0;
 		  }
-		  update_clock_buffer(hour, minute);
+		  update_clock_buffer();
 	  }
   }
   /* USER CODE END 3 */
@@ -340,11 +340,8 @@ void init_clock(){
 	HAL_GPIO_WritePin(GPIOA, EN3_Pin, GPIO_PIN_SET);
 	display7SEG(led_buffer[0]);
 }
-void update_clock_buffer(int hour, int minute){
-	led_buffer[0] = hour/10;
-	led_buffer[1] = hour%10;
-	led_buffer[2] = minute/10;
-	led_buffer[3] = minute%10;
+void update_clock_buffer(){
+	led_buffer[3]++;
 	if(led_buffer[3]>=10){
 		led_buffer[3] = 0;
 		led_buffer[2]++;
